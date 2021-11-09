@@ -7,7 +7,7 @@ public class AlexClient {
     public static void main(String[] args) throws IOException {
         Socket socket = new Socket("127.0.0.1", 3000);
 
-        try (Reader reader = new  BufferedReader(new InputStreamReader(socket.getInputStream()));
+        try (Reader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
             writer.write("Hello");
             writer.flush();

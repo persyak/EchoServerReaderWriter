@@ -16,8 +16,8 @@ public class Server {
                  Writer writer = new OutputStreamWriter(socket.getOutputStream())) {
                 int serverCount = reader.read(serverBuffer);
                 String messageFromClient = "Echo " + new String(serverBuffer, 0, serverCount);
-                     writer.write(messageFromClient);
-                     writer.flush();
+                writer.write(messageFromClient);
+                writer.flush();
             }
         }
     }
