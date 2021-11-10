@@ -9,13 +9,15 @@ public class Server {
         ServerSocket serverSocket = new ServerSocket(3000);
         //listen
         while (true) {
-            char[] serverBuffer = new char[50];
             try (Socket socket = serverSocket.accept();
-                 Reader reader = new InputStreamReader(socket.getInputStream());
-                 Writer writer = new OutputStreamWriter(socket.getOutputStream())) {
-                int serverCount = reader.read(serverBuffer);
-                String messageFromClient = "Echo " + new String(serverBuffer, 0, serverCount);
-                writer.write(messageFromClient);
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String messageFromClient = "Echo " + line;
+                    writer.write(messageFromClient + "\n");
+                    writer.flush();
+                }
             }
         }
     }

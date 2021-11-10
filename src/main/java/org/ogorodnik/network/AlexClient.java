@@ -6,14 +6,17 @@ import java.net.Socket;
 public class AlexClient {
     public static void main(String[] args) throws IOException {
         Socket socket = new Socket("127.0.0.1", 3000);
-
-        try (Reader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
-            writer.write("Hello");
-            writer.flush();
-            char[] clientBuffer = new char[50];
-            int clientCount = reader.read(clientBuffer);
-            System.out.println(new String(clientBuffer, 0, clientCount));
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+             BufferedReader readerIn = new BufferedReader(new InputStreamReader(System.in))) {
+            System.out.println("Insert word or phrase from a keyboard");
+            String input;
+            while (!("finish".equals(input = readerIn.readLine().toLowerCase()))) {
+                writer.write(input + '\n');
+                writer.flush();
+                System.out.println(reader.readLine());
+                System.out.println("Insert another word or phrase from a keyboard or word 'finish' to end connection");
+            }
         }
     }
 }
