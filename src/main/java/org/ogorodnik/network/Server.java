@@ -18,6 +18,8 @@ public class Server {
                     writer.write(messageFromClient + "\n");
                     writer.flush();
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
