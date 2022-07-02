@@ -3,28 +3,19 @@ package org.ogorodnik.network;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
-    private final static String LINE_END = "\n";
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(4);
 
     public static void main(String[] args) throws IOException {
-        try (ServerSocket serverSocket = new ServerSocket(3000)) {
 
-            //listen
+        try (ServerSocket serverSocket = new ServerSocket(3000)) {
             while (true) {
-                try (Socket socket = serverSocket.accept();
-                     BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
-                    while (true) {
-                        String line = reader.readLine();
-                        String messageFromClient = "Echo " + line;
-                        writer.write(messageFromClient);
-                        writer.write(LINE_END);
-                        writer.flush();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Socket socket = serverSocket.accept();
+                ServerClientThread serverClientThread = new ServerClientThread(socket);
+                EXECUTOR_SERVICE.execute(serverClientThread);
             }
         }
     }

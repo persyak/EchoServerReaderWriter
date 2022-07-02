@@ -20,6 +20,8 @@ public class AlexClient {
                 System.out.println(reader.readLine());
                 System.out.println("Insert another word or phrase from a keyboard or word 'finish' to end connection");
             }
+        } catch (IOException exception) {
+            throw new RuntimeException();
         }
     }
 }
